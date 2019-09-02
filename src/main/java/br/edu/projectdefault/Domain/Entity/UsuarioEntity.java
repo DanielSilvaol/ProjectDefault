@@ -12,7 +12,8 @@ import javax.persistence.*;
 @Setter
 @Entity(name = "USUARIO")
 @NoArgsConstructor
-public class UsuarioEntity {
+public class UsuarioEntity
+{
 
 
     @Id
@@ -29,12 +30,14 @@ public class UsuarioEntity {
     @Column(name = "PASSWORD")
     private String password;
 
-    public UsuarioEntity(SalvarUsuarioCommand command) {
+    @Column(name = "D_E_L_E_T_")
+    public String D_E_L_E_T_;
+
+    public UsuarioEntity(SalvarUsuarioCommand command)
+    {
         this.name = command.getName();
         this.username = command.getUsername();
         this.password = command.getPassword();
     }
-
-
 
 }
