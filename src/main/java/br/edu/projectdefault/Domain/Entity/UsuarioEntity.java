@@ -1,12 +1,12 @@
 package br.edu.projectdefault.Domain.Entity;
 
-import br.edu.projectdefault.Domain.Commands.UsuarioCommand.Inputs.SalvarUsuarioCommand;
-import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -14,30 +14,38 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class UsuarioEntity
 {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @Column(name = "USER_ID")
+    private Long ID;
 
-    @Column(name = "NAME")
-    private String name;
+    @Column(name = "NOME")
+    private String NOME ;
 
-    @Column(name = "USERNAME")
-    private String username;
+    @Column(name = "LOGIN")
+    private String LOGIN ;
 
-    @Column(name = "PASSWORD")
-    private String password;
+    @Column(name = "SENHA")
+    private String SENHA ;
+
+    @Column(name = "EMAIL")
+    private String EMAIL ;
+
+    @Column(name = "BLOQUEADO")
+    private boolean BLOQUEADO ;
+
+    @Column(name = "CPF")
+    private String CPF ;
+
+    @Column(name = "USUARIO_INCLUSAO")
+    private int USUARIO_INCLUSAO ;
+
+    @Column(name = "DATA_INCLUSAO")
+    @Temporal(TemporalType.DATE)
+    private Date DATA_INCLUSAO ;
 
     @Column(name = "D_E_L_E_T_")
-    public String D_E_L_E_T_;
+    private String D_E_L_E_T_;
 
-    public UsuarioEntity(SalvarUsuarioCommand command)
-    {
-        this.name = command.getName();
-        this.username = command.getUsername();
-        this.password = command.getPassword();
-    }
 
 }

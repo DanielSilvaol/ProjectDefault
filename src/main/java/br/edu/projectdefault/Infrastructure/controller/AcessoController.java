@@ -7,14 +7,13 @@ import br.edu.projectdefault.Domain.Commands.AcessoCommand.Outputs.AcessoTO;
 import br.edu.projectdefault.Domain.Handler.AcessoHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/Acesso")
+@RequestMapping("Acesso")
 public class AcessoController implements BaseController<AcessoTO,SalvarAcessoCommand, AtualizarAcessoCommand, DeletarAcessoCommand>
 {
     private final AcessoHandler _handler;

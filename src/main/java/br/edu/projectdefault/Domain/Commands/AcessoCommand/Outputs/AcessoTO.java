@@ -9,13 +9,18 @@ import java.util.stream.Collectors;
 @Getter
 public class AcessoTO
 {
+    public long ID;
     public String user_name;
-    public String tipo;
+    public int parametro_id;
+    public long SISTEMA;
+
 
     public AcessoTO(AcessoEntity entity)
     {
-        this.user_name = entity.entity.getName();
-        this.tipo = entity.tipo;
+        this.ID = entity.ID;
+        this.user_name = entity.entity.getNOME();
+        this.parametro_id = entity.ParametroEntity.getID();
+        this.SISTEMA = entity.getSistemaEntity().getID();
     }
 
     public static List<AcessoTO> converter(List<AcessoEntity> entity)

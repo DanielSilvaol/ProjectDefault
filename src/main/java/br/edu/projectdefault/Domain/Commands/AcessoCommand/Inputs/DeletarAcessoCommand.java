@@ -6,15 +6,13 @@ import br.edu.projectdefault.Infrastructure.repository.AcessoRepository;
 import lombok.Data;
 
 @Data
-public class DeletarAcessoCommand implements BaseCommand<AcessoEntity, AcessoRepository>
+public class DeletarAcessoCommand implements BaseCommand
 {
-    private String D_E_L_E_T_;
+    public AcessoEntity AcessoEntity;
 
     @Override
-    public AcessoEntity Update(Long id, AcessoRepository _repository)
+    public void configuration()
     {
-        AcessoEntity entity = _repository.getOne(id);
-        entity.setD_E_L_E_T_(D_E_L_E_T_);
-        return entity;
+        this.AcessoEntity.setD_E_L_E_T_("*");
     }
 }

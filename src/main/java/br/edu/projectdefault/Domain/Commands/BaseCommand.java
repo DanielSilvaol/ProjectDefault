@@ -1,6 +1,6 @@
 package br.edu.projectdefault.Domain.Commands;
 
-public interface BaseCommand<T,R>
+public interface BaseCommand
 {
-        public T Update(Long id,R _repository);
+        public void configuration();
 }

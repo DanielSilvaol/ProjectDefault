@@ -1,11 +1,11 @@
 package br.edu.projectdefault.Domain.Entity;
 
-import br.edu.projectdefault.Domain.Commands.AcessoCommand.Inputs.SalvarAcessoCommand;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -16,21 +16,28 @@ public class AcessoEntity
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    public long id;
+    public long ID;
 
-    @Column(name = "TIPO")
-    public String tipo;
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "TIPO", unique = true)
+    public ParametroEntity ParametroEntity;
 
     @OneToOne(cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "USER_ID", unique = true)
+    @JoinColumn(name = "ID_USER", unique = true)
     public UsuarioEntity entity;
 
-    @Column(name = "D_E_L_E_T_")
-    public String D_E_L_E_T_;
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    public SistemaEntity sistemaEntity;
 
-    public AcessoEntity(SalvarAcessoCommand command)
-    {
-        this.tipo = command.tipo;
-        this.entity = command.entity;
-    }
+    @Column(name = "USUARIO_INCLUSAO")
+    private int USUARIO_INCLUSAO ;
+
+    @Column(name = "DATA_INCLUSAO")
+    @Temporal(TemporalType.DATE)
+    private Date DATA_INCLUSAO ;
+
+    @Column(name = "D_E_L_E_T_")
+    private String D_E_L_E_T_;
+
+
 }

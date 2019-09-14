@@ -1,27 +1,25 @@
 package br.edu.projectdefault.Domain.Commands.UsuarioCommand.Inputs;
 
+import br.edu.projectdefault.Domain.Commands.BaseCommand;
 import br.edu.projectdefault.Domain.Entity.UsuarioEntity;
-import br.edu.projectdefault.Infrastructure.repository.UsuarioRepository;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 
-public class AtualizaUsuarioCommand
+public class AtualizaUsuarioCommand implements BaseCommand
 {
+    public UsuarioEntity UsuarioEntity;
     private String name;
     private String username;
     private String password;
 
-    public UsuarioEntity Update(Long id, UsuarioRepository _repository)
+    @Override
+    public void configuration()
     {
-        UsuarioEntity entity = _repository.getOne(id);
-
-        entity.setName(this.name == null ? entity.getName() : this.name);
-        entity.setUsername(this.username == null ? entity.getUsername() : this.username);
-        entity.setPassword(this.password == null ? entity.getPassword() : this.password);
-
-        return entity;
+        this.UsuarioEntity.setNOME(this.name == null ? this.UsuarioEntity.getNOME() : this.name);
+        this.UsuarioEntity.setLOGIN(this.username == null ? this.UsuarioEntity.getLOGIN() : this.username);
+        this.UsuarioEntity.setSENHA(this.password == null ? this.UsuarioEntity.getSENHA() : this.password);
     }
 }

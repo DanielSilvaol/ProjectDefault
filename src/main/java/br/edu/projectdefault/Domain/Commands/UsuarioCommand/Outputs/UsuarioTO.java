@@ -9,14 +9,21 @@ import java.util.stream.Collectors;
 @Getter
 public class UsuarioTO {
 
-    private Long id;
-    private String name;
-    private String username;
+    private Long ID;
+    private String NOME;
+    private String LOGIN;
+    private String EMAIL ;
+    private boolean BLOQUEADO ;
+    private String CPF ;
+
 
     public UsuarioTO(UsuarioEntity entity) {
-        this.id = entity.getId();
-        this.name = entity.getName();
-        this.username = entity.getUsername();
+        this.ID = entity.getID();
+        this.NOME = entity.getNOME();
+        this.LOGIN = entity.getLOGIN();
+        this.EMAIL = entity.getEMAIL();
+        this.BLOQUEADO = entity.isBLOQUEADO();
+        this.CPF = entity.getCPF();
     }
 
     public static List<UsuarioTO> converter(List<UsuarioEntity> users) {

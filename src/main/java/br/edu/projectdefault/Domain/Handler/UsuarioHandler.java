@@ -14,53 +14,47 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UsuarioHandler implements BaseHandler<UsuarioTO, SalvarUsuarioCommand, AtualizaUsuarioCommand, DeletarUsuarioCommand>
 {
 
-    private final UsuarioRepository _respository;
+    private final UsuarioRepository _repository;
 
     @Autowired
     public UsuarioHandler(UsuarioRepository respository)
     {
-        _respository = respository;
+        _repository = respository;
     }
 
     public List<UsuarioTO> Handler()
     {
-        List<UsuarioEntity> users = _respository.findAllByD_E_L_E_T_("");
+        List<UsuarioEntity> users = _repository.findAllByD_E_L_E_T_("");
         return UsuarioTO.converter(users);
     }
 
     public ResponseEntity<UsuarioTO> Handler(SalvarUsuarioCommand command, UriComponentsBuilder builder)
     {
-        UsuarioEntity entity = new UsuarioEntity(command);
-        entity.setD_E_L_E_T_("");
-        _respository.save(entity);
-        URI uri = builder.path("/usuario/{id}").buildAndExpand(entity.getId()).toUri();
-        return ResponseEntity.created(uri).body(new UsuarioTO(entity));
+        command.configuration();
+        _repository.save(command.UsuarioEntity);
+        URI uri = builder.path("/usuario/{id}").buildAndExpand(command.UsuarioEntity.getID()).toUri();
+        return ResponseEntity.created(uri).body(new UsuarioTO(command.UsuarioEntity));
     }
 
     public ResponseEntity<UsuarioTO> Handler(Long id, AtualizaUsuarioCommand command)
     {
-        UsuarioEntity entity = command.Update(id, _respository);
-        return ResponseEntity.ok(new UsuarioTO(entity));
+        command.UsuarioEntity = _repository.getOne(id);
+        command.configuration();
+        return ResponseEntity.ok(new UsuarioTO(command.UsuarioEntity));
     }
 
     @Override
     public ResponseEntity Handler(DeletarUsuarioCommand command, Long id)
     {
-        command.setD_E_L_E_T_("*");
-        command.Update(id, _respository);
+        command.UsuarioEntity = _repository.findById(id).get();
+        command.configuration();
         return ResponseEntity.ok().build();
     }
 
-
-    public boolean Handler(UsuarioLoginCommand command)
-    {
-        return _respository.existsByUsernameAndPassword(command.getUsername(), command.getPassword());
-    }
 
 }

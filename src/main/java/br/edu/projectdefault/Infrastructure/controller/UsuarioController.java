@@ -15,10 +15,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/Usuario")
+@RequestMapping("Usuario")
 public class UsuarioController implements BaseController<UsuarioTO,SalvarUsuarioCommand,AtualizaUsuarioCommand, DeletarUsuarioCommand>
 {
-
     private final UsuarioHandler _handler;
 
     @Autowired
@@ -52,9 +51,4 @@ public class UsuarioController implements BaseController<UsuarioTO,SalvarUsuario
         return _handler.Handler(command,id);
     }
 
-    @GetMapping("/login")
-    public boolean Get(@RequestBody UsuarioLoginCommand command)
-    {
-        return _handler.Handler(command);
-    }
 }

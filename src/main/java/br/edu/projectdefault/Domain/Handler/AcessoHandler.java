@@ -4,9 +4,9 @@ import br.edu.projectdefault.Domain.Commands.AcessoCommand.Inputs.AtualizarAcess
 import br.edu.projectdefault.Domain.Commands.AcessoCommand.Inputs.DeletarAcessoCommand;
 import br.edu.projectdefault.Domain.Commands.AcessoCommand.Inputs.SalvarAcessoCommand;
 import br.edu.projectdefault.Domain.Commands.AcessoCommand.Outputs.AcessoTO;
-import br.edu.projectdefault.Domain.Entity.AcessoEntity;
-import br.edu.projectdefault.Domain.IRepository.IAcessoRepository;
 import br.edu.projectdefault.Infrastructure.repository.AcessoRepository;
+import br.edu.projectdefault.Infrastructure.repository.ParametroRepository;
+import br.edu.projectdefault.Infrastructure.repository.SistemaRepository;
 import br.edu.projectdefault.Infrastructure.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,43 +20,48 @@ import java.util.List;
 public class AcessoHandler implements BaseHandler<AcessoTO, SalvarAcessoCommand, AtualizarAcessoCommand, DeletarAcessoCommand>
 {
     private final AcessoRepository _repository;
-    private final UsuarioRepository _repositoryUser;
+    private final ParametroRepository _repositoryParametro;
+    private final SistemaRepository _repositorySistema;
+    private final UsuarioRepository _repositoryUsuario;
 
     @Autowired
-    public AcessoHandler(AcessoRepository _repository, UsuarioRepository repositoryUser)
+    public AcessoHandler(AcessoRepository _repository, ParametroRepository repositoryParametro, SistemaRepository repositorySistema, UsuarioRepository repositoryUsuario)
     {
         this._repository = _repository;
-        _repositoryUser = repositoryUser;
+        _repositoryParametro = repositoryParametro;
+        _repositorySistema = repositorySistema;
+        _repositoryUsuario = repositoryUsuario;
     }
 
     public List<AcessoTO> Handler()
     {
-        List<AcessoEntity> entity = _repository.findAllByD_E_L_E_T_("");
-        return AcessoTO.converter(entity);
+        return AcessoTO.converter(_repository.findAllByD_E_L_E_T_(""));
     }
 
     public ResponseEntity<AcessoTO> Handler(SalvarAcessoCommand command, UriComponentsBuilder builder)
     {
-        command.entity = _repositoryUser.getOne(command.entity.getId());
-        AcessoEntity entity = new AcessoEntity(command);
-        entity.setD_E_L_E_T_("");
-        _repository.save(entity);
-        URI uri = builder.path("/acesso/{id}").buildAndExpand(entity.getId()).toUri();
-        return ResponseEntity.created(uri).body(new AcessoTO(entity));
+        command.UsuarioEntity = _repositoryUsuario.findById(command.user).get();
+        command.ParametroEntity = _repositoryParametro.findById(command.parametro).get();
+        command.SistemaEntity = _repositorySistema.findById(command.sistema).get();
+        command.configuration();
+        _repository.save(command.AcessoEntity);
+        URI uri = builder.path("/acesso/{id}").buildAndExpand(command.AcessoEntity.getID()).toUri();
+        return ResponseEntity.created(uri).body(new AcessoTO(command.AcessoEntity));
     }
 
     @Override
     public ResponseEntity<AcessoTO> Handler(Long id, AtualizarAcessoCommand command)
     {
-     AcessoEntity entity = command.Update(id,_repository);
-     return  ResponseEntity.ok(new AcessoTO(entity));
+        command.AcessoEntity = _repository.getOne(id);
+        command.configuration();
+        return ResponseEntity.ok(new AcessoTO(command.AcessoEntity));
     }
 
     @Override
     public ResponseEntity Handler(DeletarAcessoCommand command, Long id)
     {
-        command.setD_E_L_E_T_("*");
-        command.Update(id,_repository);
+        command.AcessoEntity = _repository.findById(id).get();
+        command.configuration();
         return ResponseEntity.ok().build();
     }
 }

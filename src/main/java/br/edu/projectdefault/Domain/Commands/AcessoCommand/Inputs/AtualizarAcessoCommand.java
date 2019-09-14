@@ -2,19 +2,17 @@ package br.edu.projectdefault.Domain.Commands.AcessoCommand.Inputs;
 
 import br.edu.projectdefault.Domain.Commands.BaseCommand;
 import br.edu.projectdefault.Domain.Entity.AcessoEntity;
-import br.edu.projectdefault.Infrastructure.repository.AcessoRepository;
 import lombok.Data;
 
 @Data
-public class AtualizarAcessoCommand implements BaseCommand<AcessoEntity, AcessoRepository>
+public class AtualizarAcessoCommand implements BaseCommand
 {
-    private String tipo;
+    public AcessoEntity AcessoEntity;
+    private int id_parametro;
 
     @Override
-    public AcessoEntity Update(Long id, AcessoRepository _repository)
+    public void configuration()
     {
-        AcessoEntity entity = _repository.getOne(id);
-        entity.setTipo(tipo);
-        return entity;
+        this.AcessoEntity.getParametroEntity().setID(id_parametro);
     }
 }
